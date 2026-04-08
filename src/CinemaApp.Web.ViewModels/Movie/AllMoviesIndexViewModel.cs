@@ -1,0 +1,20 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CinemaApp.Web.ViewModels.Movie
+{
+    public class AllMoviesIndexViewModel
+    {
+        public Guid Id { get; set; }
+
+        public string Title { get; set; } = null!;
+
+        public string Genre { get; set; } = null!;
+
+        [Required]
+        public string ReleaseDate { get; set; } = null!;
+
+        public string Director { get; set; } = null!;
+
+        public string? ImageUrl { get; set; }
+    }
+}
