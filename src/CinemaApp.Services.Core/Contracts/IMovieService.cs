@@ -5,5 +5,7 @@ namespace CinemaApp.Services.Core.Contracts
     public interface IMovieService
     {
         Task<IEnumerable<AllMoviesIndexViewModel>> GetAllMoviesOrderedByTitleAsync();
+
+        Task CreateMovieAsync(MovieFormViewModel movieFormModel);
     }
 }
