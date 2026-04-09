@@ -5,6 +5,9 @@ namespace CinemaApp.Web
     using Microsoft.EntityFrameworkCore;
     using CinemaApp.Services.Core.Contracts;
     using Microsoft.AspNetCore.Identity;
+    using CinemaApp.Data.Repository.Contracts;
+    using CinemaApp.Data.Repository;
+
     public class Program
     {
         public static void Main(string[] args)
@@ -18,6 +21,7 @@ namespace CinemaApp.Web
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+            builder.Services.AddScoped<IMovieRepository, MovieRepository>();
             builder.Services.AddScoped<IMovieService, MovieService>();
 
             builder.Services
