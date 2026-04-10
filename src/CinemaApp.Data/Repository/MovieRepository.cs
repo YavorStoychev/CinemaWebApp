@@ -56,6 +56,19 @@ namespace CinemaApp.Data.Repository
 
             return resultCount == 1;
         }
+        public async Task<bool> EditMovieAsync(Movie movie)
+        {
+            dbContext.Movies.Update(movie);
+            int resultCount = await SaveChangesAsync();
+
+            return resultCount == 1;
+        }
+        public async Task<bool> ExistsByIdAsync(Guid id)
+        {
+            return await dbContext
+                .Movies
+                .AnyAsync(m => m.Id == id);
+        }
         public void Dispose()
         {
             Dispose(true);
@@ -78,6 +91,5 @@ namespace CinemaApp.Data.Repository
             return await dbContext.SaveChangesAsync();  
         }
 
-       
     }
 }

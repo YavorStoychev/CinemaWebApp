@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static CinemaApp.GCommon.OutputMessages.Movie;
 using static CinemaApp.GCommon.ApplicationConstants;
+using CinemaApp.Data.Models;
 namespace CinemaApp.Web.Controllers
 {
     public class MovieController : BaseController
@@ -45,17 +46,17 @@ namespace CinemaApp.Web.Controllers
             {
                 await movieService.CreateMovieAsync(formModel);
             }
-            catch (EntityCreatePersistFailureException e)
+            catch (EntityPersistFailureException e)
             {
-                logger.LogError(e, CreateMovieFailureMessage);
-                ModelState.AddModelError(string.Empty, CreateMovieFailureMessage);
+                logger.LogError(e, string.Format(CrudMovieFailureMessage, nameof(Create)));
+                ModelState.AddModelError(string.Empty, string.Format(CrudMovieFailureMessage,"creating"));
 
                 return View(formModel);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.LogError(ex, UnexpectedErrorMessage);
-                ModelState.AddModelError(string.Empty, CreateMovieFailureMessage);
+                ModelState.AddModelError(string.Empty, CrudMovieFailureMessage);
                 return View(formModel);
             }
 
@@ -76,6 +77,52 @@ namespace CinemaApp.Web.Controllers
             }
 
             return View(movieDetailsViewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            MovieFormViewModel? movieFormViewModel = await movieService
+                .GetMovieFormByIdAsync(id);
+
+            if (movieFormViewModel == null)
+            {
+                return NotFound();
+            }
+
+            return View(movieFormViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit([FromRoute]Guid id, MovieFormViewModel formModel)
+        {
+            if (id == Guid.Empty)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(formModel);
+            }
+
+            try
+            {
+               await movieService.EditMovieAsync(id, formModel);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return NotFound();
+            }
+            catch(EntityPersistFailureException epfe)
+            {
+                logger.LogError(epfe, string.Format(CrudMovieFailureMessage, nameof(Edit)));
+                ModelState.AddModelError(string.Empty, string.Format(CrudMovieFailureMessage, "editing"));
+
+                return View(formModel);
+            }
+
+            return RedirectToAction(nameof(Details), new {id});
         }
     }
 }

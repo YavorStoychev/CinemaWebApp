@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace CinemaApp.GCommon.Exceptions
 {
-    public class EntityCreatePersistFailureException : Exception
+    public class EntityPersistFailureException : Exception
     {
-        public EntityCreatePersistFailureException()
+        public EntityPersistFailureException()
         {
 
         }
 
-        public EntityCreatePersistFailureException(string message)
+        public EntityPersistFailureException(string message)
             : base(message)
         {
 

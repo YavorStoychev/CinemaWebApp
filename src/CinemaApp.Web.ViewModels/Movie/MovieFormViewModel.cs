@@ -26,7 +26,7 @@ namespace CinemaApp.Web.ViewModels.Movie
         public int Duration { get; set; }
 
         [Required(ErrorMessage = ReleaseDateRequiredMessage)]
-        public DateTime ReleaseDate { get; set; }
+        public DateOnly ReleaseDate { get; set; }
 
         [Required(ErrorMessage = DescriptionRequiredMessage)]
         [MinLength(DescriptionMinLength, ErrorMessage = DescriptionMinLengthMessage)]
