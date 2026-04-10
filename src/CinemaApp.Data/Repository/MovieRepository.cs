@@ -43,6 +43,12 @@ namespace CinemaApp.Data.Repository
                 .ToArrayAsync();
         }
 
+        public async Task<Movie?> GetMovieByIdAsync(Guid id)
+        {
+            return await dbContext
+                .Movies
+                .FindAsync(id);
+        }
         public async Task<bool> AddMovieAsync(Movie movie)
         {
             await dbContext.Movies.AddAsync(movie);
