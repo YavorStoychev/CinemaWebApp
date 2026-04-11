@@ -1,10 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using AutoMapper;
+using CinemaApp.Services.Mapping;
+using CinemaApp.Services.Models.Movie;
+using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 
 namespace CinemaApp.Web.ViewModels.Movie
 {
     using static GCommon.OutputMessages.Movie;
     using static GCommon.ViewModelValidation.MovieViewModel;
-    public class MovieFormViewModel
+    public class MovieFormViewModel : IMapFrom<MovieDetailsDto>, IMapTo<MovieDetailsDto>, IHaveCustomMappings
     {
         [Required(ErrorMessage = TitleRequiredMessage)]
         [MinLength(TitleMinLength, ErrorMessage = TitleMinLengthMessage)]
@@ -36,5 +40,11 @@ namespace CinemaApp.Web.ViewModels.Movie
         [Url]
         [MaxLength(ImageUrlMaxLength, ErrorMessage = ImageUrlMaxLengthMessage)]
         public string? ImageUrl  { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<MovieFormViewModel, MovieDetailsDto>()
+                .ForMember(d => d.Id, opt => opt.Ignore());
+        }
     }
 }

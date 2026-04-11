@@ -6,8 +6,9 @@
     using AutoMapper;
     using static GCommon.ApplicationConstants;
     using System.Globalization;
+    using System.Reflection.PortableExecutable;
 
-    public class MovieAllDto : IMapFrom<Movie>, IHaveCustomMappings
+    public class MovieAllDto : IMapFrom<Movie>, IMapTo<Movie>, IHaveCustomMappings
     {
         public Guid Id { get; set; }
 
@@ -16,7 +17,7 @@
         public string Genre { get; set; } = null!;
 
         [Required]
-        public string ReleaseDate { get; set; } = null!;
+        public DateOnly ReleaseDate { get; set; }
 
         public string Director { get; set; } = null!;
 
@@ -24,9 +25,8 @@
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<Movie, MovieAllDto>()
-                .ForMember(d => d.ReleaseDate, 
-                cfg => cfg.MapFrom(s => s.ReleaseDate.ToString(DefaultDateFormat,CultureInfo.InvariantCulture)));
+            configuration.CreateMap<MovieAllDto, Movie>()
+                .ForMember(d => d.Id, opt => opt.Ignore());
         }
     }
 }

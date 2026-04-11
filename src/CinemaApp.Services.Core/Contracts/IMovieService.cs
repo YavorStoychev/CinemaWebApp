@@ -7,15 +7,15 @@ namespace CinemaApp.Services.Core.Contracts
     {
         Task<IEnumerable<MovieAllDto>> GetAllMoviesOrderedByTitleAsync();
 
-        Task CreateMovieAsync(MovieFormViewModel movieFormModel);
+        Task CreateMovieAsync(MovieDetailsDto movieDetailsDto);
 
-        Task<MovieDetailsViewModel?> GetMovieDetailsByIdAsync(Guid id);
+        Task<MovieDetailsDto?> GetMovieDetailsByIdAsync(Guid id);
 
-        Task<MovieFormViewModel?> GetMovieFormByIdAsync(Guid id);
+        Task<MovieDetailsDto?> GetMovieFormByIdAsync(Guid id);
 
         Task<bool> ExistsByIdAsync(Guid id);
 
-        Task EditMovieAsync(Guid id, MovieFormViewModel movieFormViewModel);
+        Task EditMovieAsync(Guid id, MovieDetailsDto movieFormViewModel);
 
         Task SoftDeleteMovieAsync(Guid id);
         Task HardDeleteMovieAsync(Guid id);
