@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using CinemaApp.Services.Mapping;
+using CinemaApp.Services.Models.Movie;
+using System.ComponentModel.DataAnnotations;
 
 namespace CinemaApp.Web.ViewModels.Movie
 {
-    public class AllMoviesIndexViewModel
+    public class AllMoviesIndexViewModel : IMapFrom<MovieAllDto>
     {
         public Guid Id { get; set; }
 

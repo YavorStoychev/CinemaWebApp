@@ -7,6 +7,9 @@ namespace CinemaApp.Web
     using Microsoft.AspNetCore.Identity;
     using CinemaApp.Data.Repository.Contracts;
     using CinemaApp.Data.Repository;
+    using CinemaApp.Services.Mapping;
+    using CinemaApp.Services.Models.Movie;
+    using CinemaApp.Web.ViewModels.Movie;
 
     public class Program
     {
@@ -19,11 +22,15 @@ namespace CinemaApp.Web
             builder.Services.AddDbContext<CinemaAppDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
+            AutoMapperConfig.RegisterMappings(typeof(MovieAllDto).Assembly, typeof(AllMoviesIndexViewModel).Assembly);
+
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+
             builder.Services.AddScoped<IMovieService, MovieService>();
 
+            builder.Services.AddSingleton(AutoMapperConfig.MapperInstance);
             builder.Services
                  .AddDefaultIdentity<IdentityUser>(options =>
                  {
@@ -32,6 +39,7 @@ namespace CinemaApp.Web
                 .AddEntityFrameworkStores<CinemaAppDbContext>();
 
             builder.Services.AddControllersWithViews();
+
 
             var app = builder.Build();
 

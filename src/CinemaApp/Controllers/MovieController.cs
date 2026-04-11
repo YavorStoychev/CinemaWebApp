@@ -6,16 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 using static CinemaApp.GCommon.OutputMessages.Movie;
 using static CinemaApp.GCommon.ApplicationConstants;
 using CinemaApp.Data.Models;
+using AutoMapper;
+using CinemaApp.Services.Models.Movie;
 namespace CinemaApp.Web.Controllers
 {
     public class MovieController : BaseController
     {
         private readonly IMovieService movieService;
+        private readonly IMapper mapper;
 
         private readonly ILogger<MovieController> logger;
-        public MovieController(IMovieService movieService, ILogger<MovieController> logger)
+        public MovieController(IMovieService movieService, IMapper mapper, ILogger<MovieController> logger)
         {
             this.movieService = movieService;
+            this.mapper = mapper;
             this.logger = logger;
         }
 
@@ -23,10 +27,13 @@ namespace CinemaApp.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            IEnumerable<AllMoviesIndexViewModel> allMovies = await movieService
+            IEnumerable<MovieAllDto> movieAllDtos = await movieService
                  .GetAllMoviesOrderedByTitleAsync();
 
-            return View(allMovies);
+            IEnumerable<AllMoviesIndexViewModel> allMoviesIndexViewModels = mapper
+                .Map<IEnumerable<AllMoviesIndexViewModel>>(movieAllDtos);
+
+            return View(allMoviesIndexViewModels);
         }
 
         [HttpGet]
