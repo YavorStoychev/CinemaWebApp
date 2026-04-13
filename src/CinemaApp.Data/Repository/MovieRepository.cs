@@ -9,18 +9,18 @@ using System.Threading.Tasks;
 
 namespace CinemaApp.Data.Repository
 {
-    public class MovieRepository : IMovieRepository, IDisposable
+    public class MovieRepository : BaseRepository, IMovieRepository
     {
         private bool isDisposed = false;
-        private readonly CinemaAppDbContext dbContext;
         public MovieRepository(CinemaAppDbContext dbContext)
+            :base(dbContext)
         {
-            this.dbContext = dbContext;
+           
         }
 
         public async Task<IEnumerable<Movie>> GetAllMoviesNoTrackingWithProjectionAsync(Func<Movie, Movie>? projectFunc = null)
         {
-            IQueryable<Movie> moviesFetchQuery = dbContext
+            IQueryable<Movie> moviesFetchQuery = DbContext
                 .Movies
                 .AsNoTracking()
                 .OrderBy(m => m.Title);
@@ -36,7 +36,7 @@ namespace CinemaApp.Data.Repository
         }
         public async Task<IEnumerable<Movie>> GetAllMoviesAsync()
         {
-            return await dbContext
+            return await DbContext
                 .Movies
                 .AsNoTracking()
                 .OrderBy(m => m.Title)
@@ -45,20 +45,20 @@ namespace CinemaApp.Data.Repository
 
         public async Task<Movie?> GetMovieByIdAsync(Guid id)
         {
-            return await dbContext
+            return await DbContext
                 .Movies
                 .FindAsync(id);
         }
         public async Task<bool> AddMovieAsync(Movie movie)
         {
-            await dbContext.Movies.AddAsync(movie);
+            await DbContext.Movies.AddAsync(movie);
             int resultCount = await SaveChangesAsync();
 
             return resultCount == 1;
         }
         public async Task<bool> EditMovieAsync(Movie movie)
         {
-            dbContext.Movies.Update(movie);
+            DbContext.Movies.Update(movie);
             int resultCount = await SaveChangesAsync();
 
             return resultCount == 1;
@@ -66,15 +66,16 @@ namespace CinemaApp.Data.Repository
         public async Task<bool> SoftDeleteMovieAsync(Movie movie)
         {
             movie.IsDeleted = true;
-            dbContext.Movies.Update(movie);
+            DbContext.Movies.Update(movie);
 
+          
             int resultCount = await SaveChangesAsync();
             return resultCount == 1;
         }
 
         public async Task<bool> HardDeleteMovieAsync(Movie movie)
         {
-            dbContext.Movies.Remove(movie);
+            DbContext.Movies.Remove(movie);
             int resultCount = await SaveChangesAsync();
 
             return resultCount == 1;
@@ -82,30 +83,14 @@ namespace CinemaApp.Data.Repository
         }
         public async Task<bool> ExistsByIdAsync(Guid id)
         {
-            return await dbContext
+            return await DbContext
                 .Movies
                 .AnyAsync(m => m.Id == id);
         }
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected void Dispose(bool disposing)
-        {
-            if (!isDisposed)
-            {
-                if (disposing)
-                {
-                    dbContext.Dispose();
-                }
-            }
-            isDisposed = true;
-        }
+       
         private async Task<int> SaveChangesAsync()
         {
-            return await dbContext.SaveChangesAsync();  
+            return await DbContext.SaveChangesAsync();  
         }
 
        
