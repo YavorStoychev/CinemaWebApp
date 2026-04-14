@@ -10,6 +10,7 @@ namespace CinemaApp.Web
     using CinemaApp.Services.Mapping;
     using CinemaApp.Services.Models.Movie;
     using CinemaApp.Web.ViewModels.Movie;
+    using CinemaApp.Web.Infrastructure.Extensions;
 
     public class Program
     {
@@ -26,11 +27,8 @@ namespace CinemaApp.Web
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddScoped<IMovieRepository, MovieRepository>();
-            builder.Services.AddScoped<IWatchlistRepository, WatchlistRepository>();
-
-            builder.Services.AddScoped<IMovieService, MovieService>();
-            builder.Services.AddScoped<IWatchlistService, WatchlistService>();
+            builder.Services.RegisterRepositories(typeof(MovieRepository));
+            builder.Services.RegisterServices(typeof(MovieService));
 
             builder.Services.AddSingleton(AutoMapperConfig.MapperInstance);
             builder.Services
