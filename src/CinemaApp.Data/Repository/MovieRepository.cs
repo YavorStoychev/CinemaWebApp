@@ -88,10 +88,7 @@ namespace CinemaApp.Data.Repository
                 .AnyAsync(m => m.Id == id);
         }
        
-        private async Task<int> SaveChangesAsync()
-        {
-            return await DbContext.SaveChangesAsync();  
-        }
+      
 
        
     }

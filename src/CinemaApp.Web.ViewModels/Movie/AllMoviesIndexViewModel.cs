@@ -21,11 +21,16 @@ namespace CinemaApp.Web.ViewModels.Movie
 
         public string? ImageUrl { get; set; }
 
+        public bool IsInUserWatchlist { get; set; }
+
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<MovieAllDto, AllMoviesIndexViewModel>()
                 .ForMember(d => d.ReleaseDate,
                 cfg => cfg.MapFrom(s => s.ReleaseDate.ToString(DefaultDateFormat, CultureInfo.InvariantCulture)));
+               
+
+
         }
     }
 }

@@ -12,16 +12,21 @@ namespace CinemaApp.Services.Core
 {
     public class MovieService : IMovieService
     {
-        private readonly IMapper mapper;
         private readonly IMovieRepository movieRepository;
-        public MovieService(IMovieRepository movieRepository, IMapper mapper)
+        private readonly IWatchlistRepository watchlistRepository;
+
+
+        private readonly IMapper mapper;
+        public MovieService(IMovieRepository movieRepository, IMapper mapper, IWatchlistRepository watchlistRepository)
         {
             this.movieRepository = movieRepository;
+            this.watchlistRepository = watchlistRepository;
+
             this.mapper = mapper;
         }
 
 
-        public async Task<IEnumerable<MovieAllDto>> GetAllMoviesOrderedByTitleAsync()
+        public async Task<IEnumerable<MovieAllDto>> GetAllMoviesOrderedByTitleAsync(string? userId = null)
         {
             IEnumerable<Movie> allMoviesDb = await movieRepository
                 .GetAllMoviesNoTrackingWithProjectionAsync(m => new Movie()
@@ -34,14 +39,23 @@ namespace CinemaApp.Services.Core
                         ImageUrl = m.ImageUrl                  
                 });
 
-            IEnumerable<MovieAllDto> allMoviesViewModel = mapper
+            IEnumerable<MovieAllDto> allMoviesDtos = mapper
                 .Map<IEnumerable<MovieAllDto>>(allMoviesDb)
                 .OrderBy(m => m.Title)
                 .ThenBy(m => m.Genre)
                 .ThenBy(m => m.Director)
                 .ToArray();
 
-            return allMoviesViewModel;
+            if (!string.IsNullOrWhiteSpace(userId))
+            {
+                foreach (MovieAllDto movieDto in allMoviesDtos)
+                {
+                    movieDto.IsInUserWatchlist = await watchlistRepository
+                        .ExistsAsync(userId, movieDto.Id);
+                }
+            }
+
+            return allMoviesDtos;
         }
         public async Task CreateMovieAsync(MovieDetailsDto movieDetailsDto)
         {
