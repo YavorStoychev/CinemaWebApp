@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewData["Title"] = "400 Bad Request";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/user.css" />
+    <link rel="stylesheet" href="~/css/bad-request.css" />
+}
+
+<div class="container bad-request-container">
+    <div class="bad-request-icon">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+    </div>
+    <div class="bad-request-title">
+        400 - Bad Request
+    </div>
+    <div class="bad-request-message">
+        Oops! The request could not be understood by the server.<br />
+        Please check the URL or try again.
+    </div>
+    <a asp-page="/Index" class="back-home-btn">
+        <i class="bi bi-house-door"></i> Back to Home
+    </a>
+</div>
