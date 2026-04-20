@@ -43,12 +43,12 @@ namespace CinemaApp.Services.Core
 
         public async Task AddMovieToUserWatchlistAsync(string userId, Guid movieId)
         {
-            bool userWatchlistEntryExists = await watchlistRepository
-                         .ExistsAsync(userId, movieId);
+            UserMovie? userMovie = await watchlistRepository
+                 .GetUserIncludeDeleteAsync(userId, movieId);
 
-            if (userWatchlistEntryExists)
+            if (userMovie != null && userMovie.IsDeleted == false)
             {
-                throw new EntityAlreadyExistsException();
+                throw new EntityNotFoundException();
             }
 
             bool movieExists = await movieRepository
@@ -59,20 +59,31 @@ namespace CinemaApp.Services.Core
                 throw new EntityNotFoundException();
             }
 
-            UserMovie newUserMovie = new UserMovie()
+            bool successPersist = false;
+
+            if (userMovie == null)
             {
-                UserId = userId,
-                MovieId = movieId
-            };
+                UserMovie newUserMovie = new UserMovie()
+                {
+                    UserId = userId,
+                    MovieId = movieId
+                };
 
-            bool successAdd = watchlistRepository
-                .AddUserMovieAsync(newUserMovie).GetAwaiter().GetResult();
+                successPersist = watchlistRepository
+                    .AddUserMovieAsync(newUserMovie).GetAwaiter().GetResult();          
+            }
+            else
+            {
+                userMovie.IsDeleted = false;
 
-            if (!successAdd)
+                successPersist = await watchlistRepository
+                    .UpdateUserAsync(userMovie);
+            }
+
+            if (!successPersist)
             {
                 throw new EntityPersistFailureException();
             }
-
         }
         public async Task<bool> MovieIsInUserWatchlistAsync(string userId, Guid movieId)
         {
@@ -90,5 +101,23 @@ namespace CinemaApp.Services.Core
             }
         }
 
+        public async Task RemoveMovieFromUserWatchlistAsync(string userId, Guid movieId)
+        {
+            UserMovie? userMovie = await watchlistRepository
+                 .GetUserMovieAsync(userId, movieId);
+
+            if (userMovie == null)
+            {
+                throw new EntityNotFoundException();
+            }
+
+           bool successDelete = await watchlistRepository
+                .SoftDeleteUserMovieAsync(userMovie);
+
+            if (!successDelete)
+            {
+                throw new EntityPersistFailureException();
+            }
+        }
     }
 }

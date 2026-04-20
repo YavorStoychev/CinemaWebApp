@@ -42,5 +42,42 @@ namespace CinemaApp.Data.Repository
 
             return resultCount == 1; 
         }
+
+        public async Task<bool> UpdateUserAsync(UserMovie userMovie)
+        {
+            DbContext.UsersMovies.Update(userMovie);
+
+            int resultCount = await SaveChangesAsync();
+
+            return resultCount == 1;
+        }
+        public async Task<bool> SoftDeleteUserMovieAsync(UserMovie userMovie)
+        {
+            userMovie.IsDeleted = true;
+            DbContext.UsersMovies.Update(userMovie);
+
+            int resultCount = await SaveChangesAsync();
+
+            return resultCount == 1;
+        }
+
+        public async Task<UserMovie?> GetUserMovieAsync(string userId, Guid movieId)
+        {
+           UserMovie? userMovie = await DbContext
+                .UsersMovies
+                .SingleOrDefaultAsync(um => um.UserId.ToLower() == userId.ToLower() && um.MovieId == movieId);
+
+            return userMovie;
+        }
+
+        public async Task<UserMovie?> GetUserIncludeDeleteAsync(string userId, Guid movieId)
+        {
+            UserMovie? userMovie = await DbContext
+               .UsersMovies
+               .IgnoreQueryFilters()
+               .SingleOrDefaultAsync(um => um.UserId.ToLower() == userId.ToLower() && um.MovieId == movieId);
+
+            return userMovie;
+        }
     }
 }
