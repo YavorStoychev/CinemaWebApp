@@ -11,5 +11,7 @@ namespace CinemaApp.GCommon
         public const string DefaultDateFormat = "dd/MM/yyyy";
 
         public const string DefaultImageUrl = "~/images/def-image.png";
+
+        public const string UnexpectedErrorMessage = "An unexpected error occurred. Please contact support.";
     }
 }

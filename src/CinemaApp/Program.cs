@@ -5,10 +5,18 @@ namespace CinemaApp.Web
     using Microsoft.EntityFrameworkCore;
     using CinemaApp.Services.Core.Contracts;
     using Microsoft.AspNetCore.Identity;
+    using CinemaApp.Data.Repository.Contracts;
+    using CinemaApp.Data.Repository;
+    using CinemaApp.Services.Mapping;
+    using CinemaApp.Services.Models.Movie;
+    using CinemaApp.Web.ViewModels.Movie;
+    using CinemaApp.Web.Infrastructure.Extensions;
+
     public class Program
     {
         public static void Main(string[] args)
         {
+            
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -16,10 +24,14 @@ namespace CinemaApp.Web
             builder.Services.AddDbContext<CinemaAppDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
+            AutoMapperConfig.RegisterMappings(typeof(MovieAllDto).Assembly, typeof(AllMoviesIndexViewModel).Assembly);
+
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddScoped<IMovieService, MovieService>();
+            builder.Services.RegisterRepositories(typeof(MovieRepository));
+            builder.Services.RegisterServices(typeof(MovieService));
 
+            builder.Services.AddSingleton(AutoMapperConfig.MapperInstance);
             builder.Services
                  .AddDefaultIdentity<IdentityUser>(options =>
                  {
@@ -28,6 +40,7 @@ namespace CinemaApp.Web
                 .AddEntityFrameworkStores<CinemaAppDbContext>();
 
             builder.Services.AddControllersWithViews();
+
 
             var app = builder.Build();
 
@@ -50,6 +63,8 @@ namespace CinemaApp.Web
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseStatusCodePagesWithRedirects("/Home/Error/{0}");
 
             app.MapControllerRoute(
                 name: "default",

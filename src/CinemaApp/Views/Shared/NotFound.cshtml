@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "404 - Not Found";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/user.css" />
+    <link rel="stylesheet" href="~/css/not-found.css" />
+}
+
+<div class="container not-found-container">
+    <div class="not-found-icon">
+        <i class="bi bi-emoji-frown-fill"></i>
+    </div>
+    <div class="not-found-title">
+        404 - Page Not Found
+    </div>
+    <div class="not-found-message">
+        Sorry, the page you are looking for does not exist.<br />
+        It might have been removed, renamed, or is temporarily unavailable.
+    </div>
+    <a asp-page="/Index" class="back-home-btn">
+        <i class="bi bi-house-door"></i> Back to Home
+    </a>
+</div>

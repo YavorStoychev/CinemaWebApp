@@ -1,8 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
-
+﻿using AutoMapper;
+using CinemaApp.Services.Mapping;
+using CinemaApp.Services.Models.Movie;
+using System.ComponentModel.DataAnnotations;
+using System.Globalization;
+using static CinemaApp.GCommon.ApplicationConstants;
 namespace CinemaApp.Web.ViewModels.Movie
 {
-    public class AllMoviesIndexViewModel
+    public class AllMoviesIndexViewModel : IMapFrom<MovieAllDto>, IHaveCustomMappings
     {
         public Guid Id { get; set; }
 
@@ -16,5 +20,17 @@ namespace CinemaApp.Web.ViewModels.Movie
         public string Director { get; set; } = null!;
 
         public string? ImageUrl { get; set; }
+
+        public bool IsInUserWatchlist { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<MovieAllDto, AllMoviesIndexViewModel>()
+                .ForMember(d => d.ReleaseDate,
+                cfg => cfg.MapFrom(s => s.ReleaseDate.ToString(DefaultDateFormat, CultureInfo.InvariantCulture)));
+               
+
+
+        }
     }
 }

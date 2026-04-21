@@ -34,6 +34,9 @@ namespace CinemaApp.Data.Models
 
         public bool IsDeleted { get; set; } = false;
 
+        public virtual ICollection<UserMovie> MovieUsersWatchlist { get; set; } 
+        = new HashSet<UserMovie>();
+
         //public virtual ICollection<CinemaMovie> MovieCinemas { get; set; } 
         //    = new HashSet<CinemaMovie>();
 

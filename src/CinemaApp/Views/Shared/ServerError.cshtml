@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "500 - Server Error";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/user.css" />
+    <link rel="stylesheet" href="~/css/server-error.css" />
+}
+
+<div class="container server-error-container">
+    <div class="server-error-icon">
+        <i class="bi bi-server"></i>
+    </div>
+    <div class="server-error-title">
+        500 - Internal Server Error
+    </div>
+    <div class="server-error-message">
+        Oops! Something went wrong on our end.<br />
+        Please try again later or contact support if the issue persists.
+    </div>
+    <a asp-page="/Index" class="back-home-btn">
+        <i class="bi bi-house-door"></i> Back to Home
+    </a>
+</div>
