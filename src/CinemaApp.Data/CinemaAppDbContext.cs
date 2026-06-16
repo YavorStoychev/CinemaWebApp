@@ -3,9 +3,9 @@
     using CinemaApp.Data.Models;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
-    public class CinemaWebAppDbContext : IdentityDbContext
+    public class CinemaAppDbContext : IdentityDbContext
     {
-        public CinemaWebAppDbContext(DbContextOptions<CinemaWebAppDbContext> options)
+        public CinemaAppDbContext(DbContextOptions<CinemaAppDbContext> options)
             : base(options)
         {
 
@@ -17,7 +17,7 @@
         {
             base.OnModelCreating(builder);
 
-            builder.ApplyConfigurationsFromAssembly(typeof(CinemaWebAppDbContext).Assembly);
+            builder.ApplyConfigurationsFromAssembly(typeof(CinemaAppDbContext).Assembly);
         }
     }
 }

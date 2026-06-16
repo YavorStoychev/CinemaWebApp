@@ -4,6 +4,8 @@ using CinemaApp.Data;
 namespace CinemaApp.Web
 {
     using CinemaApp.Data;
+    using CinemaApp.Services.Core;
+    using CinemaApp.Services.Core.Contracts;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Options;
@@ -16,16 +18,18 @@ namespace CinemaApp.Web
 
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("SqlDevConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            builder.Services.AddDbContext<CinemaWebAppDbContext>(options =>
+            builder.Services.AddDbContext<CinemaAppDbContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+            builder.Services.AddScoped<IMovieService, MovieService>();
 
             builder.Services
              .AddDefaultIdentity<IdentityUser>(options =>
             {
                 ConfigureIdentity(builder.Configuration, options);  
             })
-            .AddEntityFrameworkStores<CinemaWebAppDbContext>();
+            .AddEntityFrameworkStores<CinemaAppDbContext>();
 
             builder.Services.AddControllersWithViews();
 

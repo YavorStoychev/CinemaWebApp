@@ -21,13 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Downloads\CinemaWebAppFiles\CinemaWeb-Skeleton\CinemaApp.Services.Core\CinemaApp.Services.Core.csproj" />
     <ProjectReference Include="..\CinemaApp.Data\CinemaApp.Data.csproj" />
     <ProjectReference Include="..\CinemaApp.GCommon\CinemaApp.GCommon.csproj" />
     <ProjectReference Include="..\CinemaApp.Web.ViewModels\CinemaApp.Web.ViewModels.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\images\" />
   </ItemGroup>
 
 </Project>

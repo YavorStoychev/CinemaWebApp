@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CinemaApp.Data.Migrations
 {
-    [DbContext(typeof(CinemaWebAppDbContext))]
+    [DbContext(typeof(CinemaAppDbContext))]
     [Migration("20260614115905_AddMovieModel")]
     partial class AddMovieModel
     {

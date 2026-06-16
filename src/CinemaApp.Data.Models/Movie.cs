@@ -1,6 +1,7 @@
 ﻿namespace CinemaApp.Data.Models
 {
     using System.ComponentModel.DataAnnotations;
+
     using static CinemaApp.Data.Common.EntityValidation.Movie;
     public class Movie
     {

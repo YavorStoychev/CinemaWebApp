@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CinemaApp.Data.Migrations
 {
-    [DbContext(typeof(CinemaWebAppDbContext))]
+    [DbContext(typeof(CinemaAppDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

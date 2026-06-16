@@ -4,6 +4,8 @@ namespace CinemaApp.Web.Controllers
     using CinemaApp.Web.ViewModels;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+
+    [AllowAnonymous]
     public class HomeController : BaseController
     {
 
@@ -11,18 +13,15 @@ namespace CinemaApp.Web.Controllers
         {
 
         }
-        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
         }
-        [AllowAnonymous]
 
         public IActionResult Privacy()
         {
             return View();
         }
-        [AllowAnonymous]
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
